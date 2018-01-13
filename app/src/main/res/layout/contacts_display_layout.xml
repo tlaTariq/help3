@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:id="@+id/frag_contacts_display">
+
+        <TextView
+            android:id="@+id/srchHint_contacts_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Contact"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingLeft="20dp"
+            android:textColor="#ffff"
+            android:layout_gravity="center_vertical"
+             />
+
+
+
+        <SearchView
+            android:id="@+id/searchView_contacts_display"
+            android:queryBackground="@color/colorWhite"
+            android:queryHint="Type your search here"
+            android:searchHintIcon="@null"
+            android:searchIcon="@android:drawable/ic_menu_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="end"
+            android:layout_alignParentRight="true"></SearchView>
+
+
+    </FrameLayout>
+
+    <ListView
+        android:layout_below="@+id/frag_contacts_display"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/contacts_list_contacts_display"></ListView>
+
+</RelativeLayout>
