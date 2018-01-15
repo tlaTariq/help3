@@ -22,6 +22,7 @@ import com.example.talha.help3.ConversationAdapter;
 import com.example.talha.help3.ConversationItem;
 import com.example.talha.help3.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Conversations extends Fragment {
@@ -30,6 +31,7 @@ public class Conversations extends Fragment {
     private TextView name, msg, number;
 
     public static List<ConversationItem> convlist;
+    public static List<String> conv_numbers_list;
     public static ConversationAdapter convAdapter;
     ListView convListView;
 
@@ -46,11 +48,17 @@ public class Conversations extends Fragment {
         number = (TextView) view.findViewById(R.id.conv_number);
         convListView = (ListView) view.findViewById(R.id.convListView);
 
+        //convListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        //convListView.setStackFromBottom(true);
+
         ConversationItem item1 = new ConversationItem(); item1.setName("Ali"); item1.setMessage("Message1.."); item1.setPhone("03134206141");
         ConversationItem item2 = new ConversationItem(); item2.setName("Ahmad"); item2.setMessage("Message2.."); item2.setPhone("03134206141");
         ConversationItem item3 = new ConversationItem(); item3.setName("Basit"); item3.setMessage("Message3.."); item3.setPhone("03134206141");
         ConversationItem item4 = new ConversationItem(); item4.setName("Malik"); item4.setMessage("Message4.."); item4.setPhone("03134206141");
 
+
+
+        convlist = new ArrayList<ConversationItem>();
 
         Conversations.LoadConversations loadContact = new Conversations.LoadConversations();
         loadContact.execute();
@@ -87,7 +95,7 @@ public class Conversations extends Fragment {
         return view;
     }
 
-    class LoadConversations extends AsyncTask<Void, Void, Void> {
+    public class LoadConversations extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -108,6 +116,7 @@ public class Conversations extends Fragment {
            // db.addConvo(item1); db.addConvo(item2); db.addConvo(item3); db.addConvo(item4);
 
             convlist = db.getAllConversations();
+            conv_numbers_list = db.getAllConvoNumbers();
 //            convlist = new ArrayList<ConversationItem>();
 //            convlist.add(item1); convlist.add(item2); convlist.add(item3); convlist.add(item4);
 

@@ -251,6 +251,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_CONVO_NUMBER, item.getPhone());
 
 
+
+        // Inserting Row
+        db.insert(TABLE_CONVERSATION, null, values);
+        db.close(); // Closing database connection
+    }
+
+    public void smartAddConvo(ConversationItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CONVO_NAME, item.getName());
+        values.put(KEY_CONVO_MESSAGE, item.getMessage());
+        values.put(KEY_CONVO_NUMBER, item.getPhone());
+
+        //SQLiteDatabase dbToRead = this.getReadableDatabase();
+
+        String number = item.getPhone();
+        Integer id;
+        Cursor cursor = db.query(TABLE_CONVERSATION, new String[] { KEY_CONVO_ID, KEY_CONVO_NAME, KEY_CONVO_MESSAGE, KEY_CONVO_NUMBER }, KEY_CONVO_NUMBER + "=?", new String[] { number }, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                id = Integer.parseInt(cursor.getString(0));
+
+                db.delete(TABLE_CONVERSATION, KEY_CONVO_ID + " = ?", new String[]{String.valueOf(id)});
+
+            } while (cursor.moveToNext());
+        }
+
         // Inserting Row
         db.insert(TABLE_CONVERSATION, null, values);
         db.close(); // Closing database connection
@@ -294,7 +322,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 item.setPhone(cursor.getString(3));
 
 // Adding contact to list
-                convList.add(item);
+                convList.add(0, item);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return convList;
+    }
+
+    // Getting All Conversations
+    public ArrayList<String> getAllConvoNumbers() {
+        ArrayList<String> convList = new ArrayList<String>();
+        // Select All Query
+        String selectQuery = "SELECT " + KEY_CONVO_NUMBER + " FROM " + TABLE_CONVERSATION;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                String nmbr = cursor.getString(0);
+
+// Adding contact to list
+                convList.add(0, nmbr);
             } while (cursor.moveToNext());
         }
 
@@ -316,7 +367,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Deleting single conversation
-    public void deleteContact(ConversationItem item) {
+    public void deleteConvo(ConversationItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CONVERSATION, KEY_CONVO_ID + " = ?", new String[] { String.valueOf(item.getID()) });
         db.close();

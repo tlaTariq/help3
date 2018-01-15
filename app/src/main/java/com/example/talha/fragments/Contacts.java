@@ -47,7 +47,7 @@ public class Contacts extends Fragment {
     // Pop up
     ContentResolver resolver;
     SearchView search;
-    ContactAdapter adapter;
+    public ContactAdapter adapter;
 
 
 

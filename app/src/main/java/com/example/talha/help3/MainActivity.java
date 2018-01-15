@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.example.talha.fragments.Contacts;
 import com.example.talha.fragments.Conversations;
 
+import static com.example.talha.fragments.Conversations.convAdapter;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -38,13 +40,16 @@ public class MainActivity extends AppCompatActivity {
         return contextOfApplication;
     }
 
+    public static Integer CurrentTabPosition;
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    public static SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    public static ViewPager mViewPager;
+    public static TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +73,29 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        //This part is added manually for data updation
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                CurrentTabPosition = tab.getPosition();
+                if(CurrentTabPosition == 1)
+                    convAdapter.notifyDataSetChanged();
+//                else if (CurrentTabPosition == 2)
+//                    adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
