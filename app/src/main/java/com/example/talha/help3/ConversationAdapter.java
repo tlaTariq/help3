@@ -136,6 +136,7 @@ public class ConversationAdapter extends BaseAdapter {
         conv_numbers_list.add(0, object.getPhone());
     }
 
+
     public void updateData(List<ConversationItem> newData) {
 
         conv_data = newData;

@@ -49,25 +49,10 @@
                 android:layout_marginTop="10dp"
                 android:text="Phone no."
                 android:textSize="18dp"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_weight="0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center"
-            android:gravity="center"
-            android:visibility="gone"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/conv_check" />
-
-        </LinearLayout>
 
     </LinearLayout>
 

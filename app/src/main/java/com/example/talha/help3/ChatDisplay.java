@@ -4,10 +4,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -60,8 +62,6 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 
         //SearchView search = (SearchView) findViewById(R.id.searchViewcl);
 
-
-
         msg_edittext = (EditText) findViewById(R.id.messageEditText);
         msgListView = (ListView) findViewById(R.id.msgListView);
         ImageButton sendButton = (ImageButton) findViewById(R.id.sendMessageButton);
@@ -77,28 +77,7 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
         LoadMessages loadMsg = new LoadMessages();
         loadMsg.execute();
 
-        //chatlist = new ArrayList<ChatMessage>();
 
-
-//        ChatMessage item1 = new ChatMessage(); item1.setBody("Hi"); item1.setFor("03134206141"); item1.setDate("03134206141"); item1.setTime("03134206141"); item1.setIsMine(true);
-//        ChatMessage item2 = new ChatMessage(); item2.setBody("Hello.."); item2.setFor("03134206141"); item2.setDate("03134206141"); item2.setTime("03134206141"); item2.setIsMine(false);
-//        ChatMessage item3 = new ChatMessage(); item3.setBody("Hru?"); item3.setFor("03134206141"); item3.setDate("03134206141"); item3.setTime("03134206141"); item3.setIsMine(true);
-//        ChatMessage item4 = new ChatMessage(); item4.setBody("M fine, wat abt u?"); item4.setFor("03134206141"); item4.setDate("03134206141"); item4.setTime("03134206141"); item4.setIsMine(false);
-//
-//        chatlist1.add(item1); chatlist1.add(item2); chatlist1.add(item3); chatlist1.add(item4);
-//
-//
-//        chatAdapter = new ChatAdapter(this, chatlist1);
-//
-//        msgListView.setAdapter(chatAdapter);
-
-
-//        for(ChatMessage msg : chatlist)
-//        {
-//            chatAdapter.add(msg);
-//        }
-
-//        //chatAdapter.notifyDataSetChanged();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,13 +112,6 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 
             DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 
-            ChatMessage item1 = new ChatMessage(); item1.setBody("Hi"); item1.setFor("03134206141"); item1.setDate("03134206141"); item1.setTime("03134206141"); item1.setIsMine(true);
-            ChatMessage item2 = new ChatMessage(); item2.setBody("Hello.."); item2.setFor("03134206141"); item2.setDate("03134206141"); item2.setTime("03134206141"); item2.setIsMine(false);
-            ChatMessage item3 = new ChatMessage(); item3.setBody("Hru?"); item3.setFor("03134206141"); item3.setDate("03134206141"); item3.setTime("03134206141"); item3.setIsMine(true);
-            ChatMessage item4 = new ChatMessage(); item4.setBody("M fine, wat abt u?"); item4.setFor("03134206141"); item4.setDate("03134206141"); item4.setTime("03134206141"); item4.setIsMine(false);
-
-            // db.addMsg(item1); db.addMsg(item2); db.addMsg(item3); db.addMsg(item4);
-//
             chatlist = db.getAllMessagesForSpecificPerson(number);
 
 
@@ -154,8 +126,7 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 
             msgListView.setAdapter(chatAdapter);
 
-
-
+            registerForContextMenu(msgListView);
         }
     }
 
@@ -231,6 +202,34 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    class DeleteMessages extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Get Message list for this person
+
+            DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+
+            db.deleteMessage(chatMessageTobe);
+            chatAdapter.remove(chatMessageTobe);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            chatAdapter.notifyDataSetChanged();
+
+        }
+    }
+
     public void sendTextMessage(View v) {
 
         String message = msg_edittext.getEditableText().toString();
@@ -269,14 +268,10 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 //                ex.printStackTrace();
 //            }
 
-
-            //mSectionsPagerAdapter.notifyDataSetChanged();
-
             if (CurrentTabPosition == 1)
                 convAdapter.notifyDataSetChanged();
 
 
-//            chatAdapter.add(chatMessageTobe);
             chatAdapter.add(chatMessageTobe);
 
 //            chatMessage2.setMsgID();
@@ -318,5 +313,37 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if(v.getId() == R.id.msgListView) {
 
+
+
+            AdapterView.AdapterContextMenuInfo info =  (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+
+            menu.setHeaderTitle("Select any option");
+            String[] menuItems = {"delete" , "add to favourite"};
+            for (int i = 0; i< menuItems.length; i++)
+            {
+                menu.add(menu.NONE, i,i,menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =  (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        ChatMessage obj = chatAdapter.getMsgItem(info.position);
+        int menuItemIndex = item.getItemId();
+        //delete button
+        if(menuItemIndex == 0)
+        {
+            chatMessageTobe = obj;
+            DeleteMessages del = new DeleteMessages();
+            del.execute();
+        }
+        return true;
+    }
 }

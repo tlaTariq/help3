@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -131,6 +133,7 @@ public class Conversations extends Fragment {
             convListView.setAdapter(convAdapter);
 
             // Select item on listclick
+            registerForContextMenu(convListView);
 
         }
     }
@@ -140,5 +143,28 @@ public class Conversations extends Fragment {
     }
 
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if(v.getId() == R.id.convListView) {
+            AdapterView.AdapterContextMenuInfo info =  (AdapterView.AdapterContextMenuInfo) menuInfo;
+            menu.setHeaderTitle("Select any option");
+            String[] menuItems = {"delete" , "add to favourite"};
+            for (int i = 0; i< menuItems.length; i++)
+            {
+                menu.add(menu.NONE, i,i,menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =  (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int menuItemIndex = item.getItemId();
+        if(menuItemIndex == 0)
+        {
+        }
+        return true;
+    }
 
 }

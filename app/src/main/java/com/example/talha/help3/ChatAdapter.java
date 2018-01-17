@@ -43,8 +43,8 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return position;
+    public  Object getItem(int position) {
+        return _data.get(position);
     }
 
     @Override
@@ -90,5 +90,15 @@ public class ChatAdapter extends BaseAdapter {
 
     public void add(ChatMessage object) {
         _data.add(object);
+    }
+
+    public void remove(ChatMessage object)
+    {
+        _data.remove(object);
+    }
+
+    public ChatMessage getMsgItem(int position)
+    {
+       return _data.get(position);
     }
 }
