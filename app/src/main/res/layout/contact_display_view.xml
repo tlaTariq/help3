@@ -12,8 +12,8 @@
         android:weightSum="3">
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:id="@+id/pic_cdv"
             android:src="@mipmap/ic_launcher" />
 

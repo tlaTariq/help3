@@ -18,9 +18,9 @@ import com.example.talha.database.DatabaseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static com.example.talha.fragments.Conversations.convAdapter;
+import static com.example.talha.fragments.Favourites.favAdapter;
 import static com.example.talha.help3.MainActivity.CurrentTabPosition;
 
 /**
@@ -30,8 +30,9 @@ import static com.example.talha.help3.MainActivity.CurrentTabPosition;
 public class ChatDisplay extends AppCompatActivity implements View.OnClickListener {
 
     private EditText msg_edittext;
-    private String user1 = "khushi", user2 = "khushi1";
-    private Random random;
+
+    public static String currentUser = "";
+
     public static ArrayList<ChatMessage> chatlist;
     public static ArrayList<ChatMessage> chatlist1;
     public static ChatAdapter chatAdapter;
@@ -39,10 +40,13 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 
     public String name;
     public String number;
+    //public String callFrom;
 
     public ChatMessage chatMessageTobe;
+    public ChatMessage favChatMessageTobe;
     public ConversationItem convoItemTobe;
     public List<ConversationItem> updateConvData = new ArrayList<ConversationItem>();
+    public List<FavouriteItem> updateFavData = new ArrayList<FavouriteItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,8 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
         name = getIntent().getExtras().getString("Name");
         number = getIntent().getExtras().getString("Number");
 
-        random = new Random();
+        currentUser = number;
+        //callFrom = getIntent().getExtras().getString("CallFrom");
 
         getSupportActionBar().setTitle(name);
         //getSupportActionBar().setSubtitle(number);
@@ -113,7 +118,6 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
             DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 
             chatlist = db.getAllMessagesForSpecificPerson(number);
-
 
             return null;
         }
@@ -238,6 +242,9 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
             chatMessageTobe = new ChatMessage(1, number, message, true);
             //final ChatMessage chatMessage2 = new ChatMessage("1", number, message, false);
             //chatMessage.setMsgID();
+            if (message.length() > 10)
+                message = message.substring(0, 9) + "...";
+
             chatMessageTobe.body = message;
             chatMessageTobe.Date = CommonMethods.getCurrentDate();
             chatMessageTobe.Time = CommonMethods.getCurrentTime();
@@ -268,20 +275,11 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 //                ex.printStackTrace();
 //            }
 
-            if (CurrentTabPosition == 1)
+            if (CurrentTabPosition == 0)
                 convAdapter.notifyDataSetChanged();
 
 
             chatAdapter.add(chatMessageTobe);
-
-//            chatMessage2.setMsgID();
-//            chatMessage2.body = message;
-//            chatMessage2.Date = CommonMethods.getCurrentDate();
-//            chatMessage2.Time = CommonMethods.getCurrentTime();
-//            msg_edittext.setText("");
-//            chatAdapter.add(chatMessage2);
-
-
 
             chatAdapter.notifyDataSetChanged();
         }
@@ -324,7 +322,7 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 
 
             menu.setHeaderTitle("Select any option");
-            String[] menuItems = {"delete" , "add to favourite"};
+            String[] menuItems = {"delete" };
             for (int i = 0; i< menuItems.length; i++)
             {
                 menu.add(menu.NONE, i,i,menuItems[i]);
@@ -344,6 +342,76 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
             DeleteMessages del = new DeleteMessages();
             del.execute();
         }
+        if(menuItemIndex == 1)
+        {
+            favChatMessageTobe = obj;
+//            AddFavMessagesToDB add = new AddFavMessagesToDB();
+//            add.execute();
+            DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+
+            db.addFavMsg(favChatMessageTobe);
+
+            FavouriteItem favItemTobe = new FavouriteItem();
+            favItemTobe.setPhone(number);
+            favItemTobe.setName(name);
+            String message = favChatMessageTobe.getBody();
+            if (message.length() > 10)
+                message = message.substring(0, 9) + "...";
+            favItemTobe.setMessage(message);
+
+            //Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
+
+            favAdapter.add(favItemTobe);
+
+            db.smartAddFav(favItemTobe);
+
+            updateFavData = db.getAllFavs();
+
+//            if (CurrentTabPosition == 2)
+//                favAdapter.notifyDataSetChanged();
+        }
         return true;
+    }
+
+    class AddFavMessagesToDB extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Get Message list for this person
+
+            DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+
+            db.addFavMsg(favChatMessageTobe);
+
+            FavouriteItem favItemTobe = new FavouriteItem();
+            favItemTobe.setPhone(number);
+            favItemTobe.setName(name);
+            String message = favChatMessageTobe.getBody();
+            if (message.length() > 10)
+                message = message.substring(0, 9) + "...";
+            favItemTobe.setMessage(message);
+
+            favAdapter.add(favItemTobe);
+
+            db.smartAddFav(favItemTobe);
+
+            updateFavData = db.getAllFavs();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            if (CurrentTabPosition == 0)
+                favAdapter.notifyDataSetChanged();
+
+        }
     }
 }

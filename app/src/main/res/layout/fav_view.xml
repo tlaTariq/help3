@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/lniear_layout_fav_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -12,10 +13,10 @@
         android:weightSum="3">
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/pic"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/fav_pic"
+            android:src="@drawable/images" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,35 +30,29 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/name"
+                android:id="@+id/fav_name"
                 android:text="User name"
                 android:textSize="18dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/no"
+                android:id="@+id/fav_msg"
                 android:layout_marginTop="10dp"
-                android:text="Phone no."
+                android:text="Message..."
                 android:textSize="18dp" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_weight="0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center"
-            android:gravity="center"
-            android:visibility="gone"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/check" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fav_number"
+                android:layout_marginTop="10dp"
+                android:text="Phone no."
+                android:textSize="18dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
+
 
     </LinearLayout>
 

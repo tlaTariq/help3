@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.talha.help3.ChatDisplay;
 import com.example.talha.help3.Contact;
 import com.example.talha.help3.ContactAdapter;
+import com.example.talha.help3.GraphicsUtil;
 import com.example.talha.help3.MainActivity;
 import com.example.talha.help3.R;
 
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 public class Contacts extends Fragment {
 
 
+    static ArrayList<String> phone_numbers;
+    static ArrayList<String> contact_names;
 
     // ArrayList
     ArrayList<Contact> contactList;
@@ -58,6 +61,8 @@ public class Contacts extends Fragment {
 
 
         contactList = new ArrayList<Contact>();
+        phone_numbers = new ArrayList<String>();
+        contact_names = new ArrayList<String>();
         resolver = getContext().getContentResolver();
         listView = (ListView) view.findViewById(R.id.contacts_list);
 
@@ -129,11 +134,19 @@ public class Contacts extends Fragment {
                     String id = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
                     String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                     String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                    if(phoneNumber.startsWith("0"))
+                        phoneNumber = "+92" + phoneNumber.substring(1);
+
                     String image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
                     try {
+                        GraphicsUtil roundImage = new GraphicsUtil();
                         if (image_thumb != null) {
                             bit_thumb = MediaStore.Images.Media.getBitmap(resolver, Uri.parse(image_thumb));
+
+                            bit_thumb = roundImage.getRoundedShape(bit_thumb);
                         } else {
+
 
                         }
                     } catch (IOException e) {
@@ -146,6 +159,9 @@ public class Contacts extends Fragment {
                     Contact.setPhone(phoneNumber);
                     Contact.setCheckedBox(false);
                     contactList.add(Contact);
+
+                    phone_numbers.add(phoneNumber);
+                    contact_names.add(name);
                 }
             }
             //phones.close();
@@ -166,6 +182,14 @@ public class Contacts extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+    }
+
+    public static String giveMeName(String number)
+    {
+        int id = phone_numbers.indexOf(number);
+        if(id >=0 )
+            return contact_names.get(id);
+        return number;
     }
 
 

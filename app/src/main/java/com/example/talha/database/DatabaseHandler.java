@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.talha.help3.ChatMessage;
 import com.example.talha.help3.ConversationItem;
+import com.example.talha.help3.FavouriteItem;
 
 import java.util.ArrayList;
 
@@ -275,16 +276,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_MSG_BODY, item.getBody());
-        values.put(KEY_MSG_DATE, item.getDate());
-        values.put(KEY_MSG_TIME, item.getTime());
+        values.put(KEY_FAV_MSG_BODY, item.getBody());
+        values.put(KEY_FAV_MSG_DATE, item.getDate());
+        values.put(KEY_FAV_MSG_TIME, item.getTime());
         String flag;
         if(item.getIsMine())
             flag = "1";
         else
             flag = "0";
-        values.put(KEY_MSG_FOR, item.getFor());
-        values.put(KEY_MSG_FLAG, flag);
+        values.put(KEY_FAV_MSG_FOR, item.getFor());
+        values.put(KEY_FAV_MSG_FLAG, flag);
 
 
         // Inserting Row
@@ -571,7 +572,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     //All CRUD(Create, Read, Update, Delete) Operations For Favourites Table
 
     // Adding new favourite
-    public void addFav(ConversationItem item) {
+    public void addFav(FavouriteItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -586,7 +587,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    public void smartAddFav(ConversationItem item) {
+    public void smartAddFav(FavouriteItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -598,12 +599,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String number = item.getPhone();
         Integer id;
-        Cursor cursor = db.query(TABLE_FOVOURITE, new String[] { KEY_CONVO_ID, KEY_CONVO_NAME, KEY_CONVO_MESSAGE, KEY_CONVO_NUMBER }, KEY_CONVO_NUMBER + "=?", new String[] { number }, null, null, null, null);
+        Cursor cursor = db.query(TABLE_FOVOURITE, new String[] { KEY_FAV_ID, KEY_FAV_NAME, KEY_FAV_MESSAGE, KEY_FAV_NUMBER }, KEY_FAV_NUMBER + "=?", new String[] { number }, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 id = Integer.parseInt(cursor.getString(0));
 
-                db.delete(TABLE_FOVOURITE, KEY_CONVO_ID + " = ?", new String[]{String.valueOf(id)});
+                db.delete(TABLE_FOVOURITE, KEY_FAV_ID + " = ?", new String[]{String.valueOf(id)});
 
             } while (cursor.moveToNext());
         }
@@ -614,27 +615,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Getting single favourite
-    public ConversationItem getFav(int id) {
+    public FavouriteItem getFav(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_FOVOURITE, new String[] { KEY_CONVO_ID, KEY_CONVO_NAME, KEY_CONVO_MESSAGE, KEY_CONVO_NUMBER }, KEY_CONVO_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        ConversationItem item = new ConversationItem();
+        FavouriteItem item = new FavouriteItem();
         item.setID(Integer.parseInt(cursor.getString(0)));
         item.setName(cursor.getString(1));
         item.setMessage(cursor.getString(2));
         item.setPhone(cursor.getString(3));
 
-        //ConversationItem item = new ConversationItem(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
+        //FavouriteItem item = new FavouriteItem(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
         // return contact
         return item;
     }
 
     // Getting All Favourites
-    public ArrayList<ConversationItem> getAllFavs() {
-        ArrayList<ConversationItem> convList = new ArrayList<ConversationItem>();
+    public ArrayList<FavouriteItem> getAllFavs() {
+        ArrayList<FavouriteItem> convList = new ArrayList<FavouriteItem>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_FOVOURITE;
 
@@ -644,7 +645,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                ConversationItem item = new ConversationItem();
+                FavouriteItem item = new FavouriteItem();
                 item.setID(Integer.parseInt(cursor.getString(0)));
                 item.setName(cursor.getString(1));
                 item.setMessage(cursor.getString(2));
@@ -659,7 +660,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return convList;
     }
 
-    // Getting All Conversations
+    // Getting All Favourites
     public ArrayList<String> getAllFavNumbers() {
         ArrayList<String> convList = new ArrayList<String>();
         // Select All Query
@@ -683,7 +684,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Updating single conversation
-    public int updateFav(ConversationItem item) {
+    public int updateFav(FavouriteItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -696,7 +697,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Deleting single conversation
-    public void deleteFav(ConversationItem item) {
+    public void deleteFav(FavouriteItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_FOVOURITE, KEY_CONVO_ID + " = ?", new String[] { String.valueOf(item.getID()) });
         db.close();

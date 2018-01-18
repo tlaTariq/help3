@@ -28,6 +28,9 @@ public class ContactsDisplay extends Activity {
     // ArrayList
     ArrayList<Contact> contactList;
     //List<SelectUser> temp;
+
+    ArrayList<String> phone_numbers;
+
     // Contact List
     ListView listView;
     // Cursor to load contacts list
@@ -46,6 +49,7 @@ public class ContactsDisplay extends Activity {
 
 
         contactList = new ArrayList<Contact>();
+        phone_numbers = new ArrayList<String>();
         resolver = this.getContentResolver();
         listView = (ListView) findViewById(R.id.contacts_list_contacts_display);
 
@@ -115,6 +119,10 @@ public class ContactsDisplay extends Activity {
                     String id = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
                     String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                     String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                    if(phoneNumber.startsWith("0"))
+                        phoneNumber = "+92" + phoneNumber.substring(1);
+
                     String image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
                     try {
                         if (image_thumb != null) {
@@ -132,6 +140,8 @@ public class ContactsDisplay extends Activity {
                     Contact.setPhone(phoneNumber);
                     Contact.setCheckedBox(false);
                     contactList.add(Contact);
+
+                    phone_numbers.add(phoneNumber);
                 }
             }
             //phones.close();
@@ -148,6 +158,14 @@ public class ContactsDisplay extends Activity {
 
             listView.setFastScrollEnabled(true);
         }
+    }
+
+    public String giveMeName(String number)
+    {
+        int id = phone_numbers.indexOf(number);
+        if(id >=0 )
+            return contactList.get(id).getName();
+        return number;
     }
 
 

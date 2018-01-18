@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         return contextOfApplication;
     }
 
-    public static Integer CurrentTabPosition;
+    public static Integer CurrentTabPosition = 0;
 
 
     public static SectionsPagerAdapter mSectionsPagerAdapter;
@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 CurrentTabPosition = tab.getPosition();
-                if(CurrentTabPosition == 1)
+                if(CurrentTabPosition == 0)
                     convAdapter.notifyDataSetChanged();
 //                else if (CurrentTabPosition == 2)
-//                    adapter.notifyDataSetChanged();
+//                    favAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -185,12 +185,15 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 1) {
+            if (position == 0) {
                 return new Conversations();
             }
-            else if (position == 2) {
+            else if (position == 1) {
                 return new Contacts();
             }
+//            else if (position == 2) {
+//                return new Favourites();
+//            }
             else
             return PlaceholderFragment.newInstance(position + 1);
         }
@@ -198,18 +201,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "FAVOURITES";
-                case 1:
                     return "CHATS";
-                case 2:
+                case 1:
                     return "CONTACTS";
+//                case 2:
+//                    return "FAVOURITES";
             }
             return null;
         }
