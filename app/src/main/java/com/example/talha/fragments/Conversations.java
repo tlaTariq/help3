@@ -42,23 +42,12 @@ public class Conversations extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.conv_layout, container, false);
 
-        /*((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
-                "Chats");*/
+
         img = (ImageView) view.findViewById(R.id.conv_pic);
         name = (TextView) view.findViewById(R.id.conv_name);
         msg = (TextView) view.findViewById(R.id.conv_msg);
         number = (TextView) view.findViewById(R.id.conv_number);
         convListView = (ListView) view.findViewById(R.id.convListView);
-
-        //convListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-        //convListView.setStackFromBottom(true);
-
-        ConversationItem item1 = new ConversationItem(); item1.setName("Ali"); item1.setMessage("Message1.."); item1.setPhone("03134206141");
-        ConversationItem item2 = new ConversationItem(); item2.setName("Ahmad"); item2.setMessage("Message2.."); item2.setPhone("03134206141");
-        ConversationItem item3 = new ConversationItem(); item3.setName("Basit"); item3.setMessage("Message3.."); item3.setPhone("03134206141");
-        ConversationItem item4 = new ConversationItem(); item4.setName("Malik"); item4.setMessage("Message4.."); item4.setPhone("03134206141");
-
-
 
         convlist = new ArrayList<ConversationItem>();
 
@@ -110,17 +99,8 @@ public class Conversations extends Fragment {
 
             DatabaseHandler db = new DatabaseHandler(getContext());
 
-            ConversationItem item1 = new ConversationItem(); item1.setName("Ali"); item1.setMessage("Message1.."); item1.setPhone("03134206141");
-            ConversationItem item2 = new ConversationItem(); item2.setName("Ahmad"); item2.setMessage("Message2.."); item2.setPhone("03134206141");
-            ConversationItem item3 = new ConversationItem(); item3.setName("Basit"); item3.setMessage("Message3.."); item3.setPhone("03134206141");
-            ConversationItem item4 = new ConversationItem(); item4.setName("Malik"); item4.setMessage("Message4.."); item4.setPhone("03134206141");
-//
-           // db.addConvo(item1); db.addConvo(item2); db.addConvo(item3); db.addConvo(item4);
-
             convlist = db.getAllConversations();
             conv_numbers_list = db.getAllConvoNumbers();
-//            convlist = new ArrayList<ConversationItem>();
-//            convlist.add(item1); convlist.add(item2); convlist.add(item3); convlist.add(item4);
 
             return null;
         }

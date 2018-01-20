@@ -240,8 +240,7 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 
         if (!message.equalsIgnoreCase("")) {
             chatMessageTobe = new ChatMessage(1, number, message, true);
-            //final ChatMessage chatMessage2 = new ChatMessage("1", number, message, false);
-            //chatMessage.setMsgID();
+
             if (message.length() > 10)
                 message = message.substring(0, 9) + "...";
 
@@ -264,16 +263,16 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
             AddConvoToDB addConvo = new AddConvoToDB();
             addConvo.execute();
 
-//            try {
-//                SmsManager smsManager = SmsManager.getDefault();
-//                smsManager.sendTextMessage(number, null, message, null, null);
-//                //Toast.makeText(getApplicationContext(), "Message Sent",
-//                //Toast.LENGTH_LONG).show();
-//            } catch (Exception ex) {
-//                //Toast.makeText(getApplicationContext(),ex.getMessage().toString(),
-//                //Toast.LENGTH_LONG).show();
-//                ex.printStackTrace();
-//            }
+            try {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(number, null, message, null, null);
+                //Toast.makeText(getApplicationContext(), "Message Sent",
+                //Toast.LENGTH_LONG).show();
+            } catch (Exception ex) {
+                //Toast.makeText(getApplicationContext(),ex.getMessage().toString(),
+                //Toast.LENGTH_LONG).show();
+                ex.printStackTrace();
+            }
 
             if (CurrentTabPosition == 0)
                 convAdapter.notifyDataSetChanged();
@@ -322,7 +321,7 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 
 
             menu.setHeaderTitle("Select any option");
-            String[] menuItems = {"delete" };
+            String[] menuItems = {"delete", "add to favourite" };
             for (int i = 0; i< menuItems.length; i++)
             {
                 menu.add(menu.NONE, i,i,menuItems[i]);
@@ -361,7 +360,7 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
 
             //Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
 
-            favAdapter.add(favItemTobe);
+            //favAdapter.add(favItemTobe);
 
             db.smartAddFav(favItemTobe);
 

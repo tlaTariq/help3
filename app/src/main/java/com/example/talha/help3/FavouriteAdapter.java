@@ -63,15 +63,6 @@ public class FavouriteAdapter extends BaseAdapter {
             view = convertView;
         }
 
-//        v = new ViewHolder();
-//
-//        v.title = (TextView) view.findViewById(R.id.fav_name);
-//        v.check = (CheckBox) view.findViewById(R.id.fav_check);
-//        v.phone = (TextView) view.findViewById(R.id.fav_number);
-//        v.message = (TextView) view.findViewById(R.id.fav_msg);
-//        v.imageView = (ImageView) view.findViewById(R.id.fav_pic);
-
-
 
         TextView name = (TextView) view.findViewById(R.id.fav_name);
         //v.check = (CheckBox) view.findViewById(R.id.fav_check);
@@ -87,41 +78,6 @@ public class FavouriteAdapter extends BaseAdapter {
         mseg.setText(data.getMessage());
         imv.setImageDrawable(this._c.getDrawable(R.drawable.images));
 
-//        final FavouriteItem data = (FavouriteItem) fav_data.get(i);
-//        v.title.setText(data.getName());
-//        v.check.setChecked(data.getCheckedBox());
-//        v.phone.setText(data.getPhone());
-//        v.message.setText(data.getMessage());
-
-        // Set image if exists
-//        try {
-//
-//            if (data.getThumb() != null) {
-//                v.imageView.setImageBitmap(data.getThumb());
-//            } else {
-//                v.imageView.setImageResource(R.drawable.images);
-//            }
-//            // Seting round image
-//            Bitmap bm = BitmapFactory.decodeResource(view.getResources(), R.drawable.images); // Load default image
-//
-//        } catch (OutOfMemoryError e) {
-//            // Add default picture
-//            v.imageView.setImageDrawable(this._c.getDrawable(R.drawable.images));
-//            e.printStackTrace();
-//        }
-
-        /*// Set check box listener android
-        v.check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View contact_view) {
-                CheckBox checkBox = (CheckBox) contact_view;
-                if (checkBox.isChecked()) {
-                    data.setCheckedBox(true);
-                  } else {
-                    data.setCheckedBox(false);
-                }
-            }
-        });*/
 
         view.setTag(data);
         return view;

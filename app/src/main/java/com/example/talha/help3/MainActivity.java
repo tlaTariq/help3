@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.talha.fragments.Contacts;
 import com.example.talha.fragments.Conversations;
+import com.example.talha.fragments.Favourites;
 
 import static com.example.talha.fragments.Conversations.convAdapter;
 
@@ -130,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(i);
             return true;
         }
 
@@ -191,9 +194,9 @@ public class MainActivity extends AppCompatActivity {
             else if (position == 1) {
                 return new Contacts();
             }
-//            else if (position == 2) {
-//                return new Favourites();
-//            }
+            else if (position == 2) {
+                return new Favourites();
+            }
             else
             return PlaceholderFragment.newInstance(position + 1);
         }
@@ -201,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
@@ -211,8 +214,8 @@ public class MainActivity extends AppCompatActivity {
                     return "CHATS";
                 case 1:
                     return "CONTACTS";
-//                case 2:
-//                    return "FAVOURITES";
+                case 2:
+                    return "FAVOURITES";
             }
             return null;
         }

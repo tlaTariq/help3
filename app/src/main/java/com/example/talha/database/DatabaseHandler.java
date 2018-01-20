@@ -358,7 +358,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         //Cursor cursor = db.rawQuery(selectQuery, null);
 
-        Cursor cursor = db.query(TABLE_FAVOURITE_MESSAGE, new String[] { KEY_MSG_ID, KEY_MSG_BODY, KEY_MSG_DATE, KEY_MSG_TIME, KEY_MSG_FOR, KEY_MSG_FLAG }, KEY_MSG_FOR + "=?", new String[] { conversator }, null, null, null, null);
+        Cursor cursor = db.query(TABLE_FAVOURITE_MESSAGE, new String[] { KEY_FAV_MSG_ID, KEY_FAV_MSG_BODY, KEY_FAV_MSG_DATE, KEY_FAV_MSG_TIME, KEY_FAV_MSG_FOR, KEY_FAV_MSG_FLAG }, KEY_FAV_MSG_FOR + "=?", new String[] { conversator }, null, null, null, null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
