@@ -7,12 +7,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class SettingsActivity extends AppCompatActivity {
 
     TextView displayName;
     TextView About;
     static String textInDisplayName = "";
+    ToggleButton toggleButton;
+
+    //for setting sending mode
+    static boolean IS_ONLINE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,19 @@ public class SettingsActivity extends AppCompatActivity {
 
         About = (TextView) findViewById(R.id.about);
 
-
-
+        toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick (View v) {
+                if (IS_ONLINE){
+                    toggleButton.setText("Offline Mode");
+                    //IS_ONLINE = false;
+                }
+                else
+                {
+                    toggleButton.setText("Online Mode");
+                }
+                IS_ONLINE = !IS_ONLINE;
+            }
+        });
     }
 }

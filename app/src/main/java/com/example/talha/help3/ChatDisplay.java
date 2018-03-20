@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.example.talha.SignalRService;
 import com.example.talha.database.DatabaseHandler;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
 import static com.example.talha.fragments.Conversations.convAdapter;
 import static com.example.talha.fragments.Favourites.favAdapter;
 import static com.example.talha.help3.MainActivity.CurrentTabPosition;
+import static com.example.talha.help3.SettingsActivity.IS_ONLINE;
 
 /**
  * Created by talha on 1/8/2018.
@@ -263,15 +265,33 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
             AddConvoToDB addConvo = new AddConvoToDB();
             addConvo.execute();
 
-            try {
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(number, null, message, null, null);
-                //Toast.makeText(getApplicationContext(), "Message Sent",
-                //Toast.LENGTH_LONG).show();
-            } catch (Exception ex) {
-                //Toast.makeText(getApplicationContext(),ex.getMessage().toString(),
-                //Toast.LENGTH_LONG).show();
-                ex.printStackTrace();
+
+            if(!IS_ONLINE ) {
+
+                try {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(number, null, message, null, null);
+//                    Toast.makeText(getApplicationContext(), "Offline Message Sent",
+//                    Toast.LENGTH_LONG).show();
+                } catch (Exception ex) {
+                    //Toast.makeText(getApplicationContext(),ex.getMessage().toString(),
+                    //Toast.LENGTH_LONG).show();
+                    ex.printStackTrace();
+                }
+            }
+
+            else if(IS_ONLINE)
+            {
+                try {
+                    SignalRService.sendMessage_To(number, message);
+
+//                    Toast.makeText(getApplicationContext(), "Online Message Sent",
+//                    Toast.LENGTH_LONG).show();
+                } catch (Exception ex) {
+                    //Toast.makeText(getApplicationContext(),ex.getMessage().toString(),
+                    //Toast.LENGTH_LONG).show();
+                    ex.printStackTrace();
+                }
             }
 
             if (CurrentTabPosition == 0)
