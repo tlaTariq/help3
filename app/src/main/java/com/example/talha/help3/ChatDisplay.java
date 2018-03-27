@@ -188,6 +188,7 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
             //db.addConvo(convoItemTobe);
             db.smartAddConvo(convoItemTobe);
 
+
             updateConvData = db.getAllConversations();
             //mSectionsPagerAdapter = new MainActivity.SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -243,8 +244,8 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
         if (!message.equalsIgnoreCase("")) {
             chatMessageTobe = new ChatMessage(1, number, message, true);
 
-            if (message.length() > 10)
-                message = message.substring(0, 9) + "...";
+//            if (message.length() > 10)
+//                message = message.substring(0, 9) + "...";
 
             chatMessageTobe.body = message;
             chatMessageTobe.Date = CommonMethods.getCurrentDate();
@@ -258,7 +259,10 @@ public class ChatDisplay extends AppCompatActivity implements View.OnClickListen
             convoItemTobe = new ConversationItem();
             convoItemTobe.setPhone(number);
             convoItemTobe.setName(name);
-            convoItemTobe.setMessage(message);
+            String convoMsg = message;
+            if (message.length() > 10)
+                convoMsg = message.substring(0, 9) + "...";
+            convoItemTobe.setMessage(convoMsg);
 
            convAdapter.add(convoItemTobe);
 
