@@ -246,7 +246,12 @@ public class SignalRService extends Service {
                                         convoItemTobe = new ConversationItem();
                                         convoItemTobe.setPhone(msg_from);
                                         convoItemTobe.setName(Contacts.giveMeName(msg_from));
-                                        convoItemTobe.setMessage(msgBody);
+
+                                        String convoMsg = msgBody;
+                                        if (msgBody.length() > 10)
+                                            convoMsg = msgBody.substring(0, 9) + "...";
+
+                                        convoItemTobe.setMessage(convoMsg);
 
                                         convAdapter.add(convoItemTobe);
 

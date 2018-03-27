@@ -92,6 +92,11 @@ public class SmsListener extends BroadcastReceiver {
                         convoItemTobe = new ConversationItem();
                         convoItemTobe.setPhone(msg_from);
                         convoItemTobe.setName(Contacts.giveMeName(msg_from));
+
+                        String convoMsg = msgBody;
+                        if (msgBody.length() > 10)
+                            convoMsg = msgBody.substring(0, 9) + "...";
+
                         convoItemTobe.setMessage(msgBody);
 
                         convAdapter.add(convoItemTobe);
